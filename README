@@ -1,2 +1,3 @@
 This is a simple Proxy between Salesforce Chatter and an Arduino Card
+Main code is in defaultServant.rb
 Run using ruby rxProxy.rb
