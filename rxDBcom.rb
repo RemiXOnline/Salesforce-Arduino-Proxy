@@ -35,4 +35,10 @@ class RXdbcom
     f=Databasedotcom::Chatter::FeedItem.find(@client,origin);
     f.comment(reply)
   end
+  # Like to Chatter
+  def likeToChatter(origin)
+    Debug.log "Like to chatter (#{origin})"
+    f=Databasedotcom::Chatter::FeedItem.find(@client,origin);
+    f.like
+  end
 end

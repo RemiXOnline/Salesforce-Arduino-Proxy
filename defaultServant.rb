@@ -21,16 +21,14 @@ class NotificationPort
     feed=request.notification[0].sObject
     cmd=feed.text__c
     Debug.log "Commande = #{feed.text__c}"
+    
+    $global_request=request
+    $global_feed=feed
 
     # Send Command to Arduino
-    arduino=RXarduino.new('127.0.0.1',3333);
+    arduino=RXarduino.new('172.16.27.100',80);
     if(arduino.server)
       response=arduino.sendCmd cmd
-    end
-    # Reply to Chatter
-    dbcom=RXdbcom.new(request.sessionId, request.enterpriseUrl);
-    if (dbcom.client)
-      dbcom.replyToChatter(feed.feedId__c,response)
     end
 
     # Return ACK to OutboundMessage

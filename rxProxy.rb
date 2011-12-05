@@ -5,6 +5,7 @@ require 'defaultServant.rb'
 require 'defaultMappingRegistry.rb'
 require 'soap/rpc/standaloneServer'
 require 'rxUtil'
+require 'rxLocalServer'
 
 class NotificationPort
   Methods = [
@@ -43,5 +44,7 @@ if $0 == __FILE__
   trap(:INT) do
     server.shutdown
   end
+  
+  t1=Thread.new{localServer()}
   server.start
 end
