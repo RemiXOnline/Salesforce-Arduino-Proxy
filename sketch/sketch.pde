@@ -1,5 +1,14 @@
+// rMP3
+#include <RogueMP3.h>
+#include <NewSoftSerial.h>
+
 #include <Ethernet.h>
 #include <SPI.h>
+
+
+NewSoftSerial rmp3_serial(6, 7);
+RogueMP3 rmp3(rmp3_serial); 
+ 
 boolean reading = false;
 
 ////////////////////////////////////////////////////////////////////////
@@ -31,6 +40,11 @@ void setup(){
   server.begin();
   triggerPin(9,NULL);
   Serial.begin(9600);
+  
+  // Play Test MP3
+ rmp3_serial.begin(9600);
+ rmp3.sync();
+ rmp3.playfile("/Ringtone.mp3");
   
   delay(1000);
 
