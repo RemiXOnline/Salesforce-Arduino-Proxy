@@ -1,6 +1,7 @@
 // rMP3
 #include <RogueMP3.h>
 #include <NewSoftSerial.h>
+#define _song1 "/Ringtone.mp3"
 
 #include <Ethernet.h>
 #include <SPI.h>
@@ -15,7 +16,7 @@ boolean reading = false;
 //CONFIGURE
 ////////////////////////////////////////////////////////////////////////
   byte ip[] = { 172, 16, 27, 100 };   //ip address to assign the arduino
-  byte gateway[] = { 172, 16, 27, 1 }; //ip address of the gatewa or router
+  byte gateway[] = { 172, 16, 27, 1 }; //ip address of the gateway or router
   //Rarly need to change this
   byte subnet[] = { 255, 255, 255, 0 };
   // if need to change the MAC address (Very Rare)
@@ -31,7 +32,8 @@ boolean reading = false;
   int proxyPort=2000;
 
 ////////////////////////////////////////////////////////////////////////
-
+// S.E.T U.P
+////////////////////////////////////////////////////////////////////////
 void setup(){
   //Pins 10,11,12 & 13 are used by the ethernet shield
   pinMode(9, OUTPUT);
@@ -44,13 +46,17 @@ void setup(){
   // Play Test MP3
  rmp3_serial.begin(9600);
  rmp3.sync();
- rmp3.playfile("/Ringtone.mp3");
+ rmp3.playfile(_song1);
   
   delay(1000);
 
   Serial.println("Begin Serial ...");
 }
 
+
+////////////////////////////////////////////////////////////////////////
+// L.O.O.P
+////////////////////////////////////////////////////////////////////////
 void loop()
 {
   // listen for Sensor
@@ -78,6 +84,11 @@ void checkForSensor()
     toString[0]='\0';
     sprintf(toString, "Sensor Value %d",analogValue);
   
+    // Play Test MP3
+    rmp3_serial.begin(9600);
+    rmp3.sync();
+    rmp3.playfile(_song1);
+ 
     Client client(proxyIP, proxyPort);
     if (client.connect()) {
       client.println(toString);

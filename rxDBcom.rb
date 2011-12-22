@@ -41,4 +41,14 @@ class RXdbcom
     f=Databasedotcom::Chatter::FeedItem.find(@client,origin);
     f.like
   end
+  def readSongs
+    song_class = @client.materialize("Song__c") 
+    listSongs=Song__c.query "name<>'' order by sequence_number__c"
+    songs=[]
+    listSongs.each { |s|
+      songs << s.Name
+    }
+    Debug.log "Playlist (#{songs})"
+    return songs
+  end
 end

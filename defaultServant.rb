@@ -25,10 +25,15 @@ class NotificationPort
     $global_request=request
     $global_feed=feed
 
-    # Send Command to Arduino
-    arduino=RXarduino.new('172.16.27.100',80);
-    if(arduino.server)
-      response=arduino.sendCmd cmd
+    if cmd=="Wake Up"
+      # Read PlayList
+      dbcom=RXdbcom.new($global_request.sessionId, $global_request.enterpriseUrl)
+      dbcom.readSongs 
+      # Send Command to Arduino
+      arduino=RXarduino.new('127.0.0.1',3333);
+      if arduino.server
+        response=arduino.sendCmd "CMD WAKEUP"
+      end
     end
 
     # Return ACK to OutboundMessage
