@@ -22,7 +22,7 @@ end
 
 class NotificationPortApp < ::SOAP::RPC::StandaloneServer
   def initialize(*arg)
-    Debug.log("Started")
+    Debug.log("Started : Available to receive Soap Notifications")
     super(*arg)
     servant = NotificationPort.new
     NotificationPort::Methods.each do |definitions|

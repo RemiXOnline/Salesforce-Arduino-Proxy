@@ -16,29 +16,37 @@ class NotificationPort
   #   response        NotificationsResponse - {http://soap.sforce.com/2005/09/outbound}notificationsResponse
   #
   def notifications(request)
+    begin
     Debug.log "-------- NEW REQUEST --------------"
     #p [request]
     feed=request.notification[0].sObject
     cmd=feed.text__c
-    Debug.log "Commande = #{feed.text__c}"
+    Debug.log "Commande = #{cmd}"
     
-    $global_request=request
-    $global_feed=feed
+    $request, $feed =request, feed
 
-    if cmd=="Wake Up"
+    if cmd.upcase=="WAKE UP"
       # Read PlayList
-      dbcom=RXdbcom.new($global_request.sessionId, $global_request.enterpriseUrl)
-      dbcom.readSongs 
-      # Send Command to Arduino
-      arduino=RXarduino.new('127.0.0.1',3333);
+      $dbcom=RXdbcom.new($request.sessionId, $request.enterpriseUrl)
+      if $dbcom.client
+        $songs=$dbcom.readSongs 
+      end
+      $index=0
+      Debug.log "Playlist : #{$songs.inspect}"
+      # Send Command to Arduino PMP3#{$song[$index]}
+      arduino=RXarduino.new(ARDUINO[:IP],ARDUINO[:PORT]);
       if arduino.server
-        response=arduino.sendCmd "CMD WAKEUP"
+        response=arduino.sendCmd "PMP3#{$songs[$index]}"
       end
     end
-
-    # Return ACK to OutboundMessage
-    ack=NotificationsResponse.new(true)
-    return ack
+    
+    rescue =>ex 
+      Debug.log "UNEXPECTED EXCEPTION => #{ex.class} : #{ex.message}"  
+    ensure
+      # Return ACK to OutboundMessage
+      ack=NotificationsResponse.new(true)
+      ack
+     end
   end
 end
 
