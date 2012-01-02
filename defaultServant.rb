@@ -37,6 +37,8 @@ class NotificationPort
       arduino=RXarduino.new(ARDUINO[:IP],ARDUINO[:PORT]);
       if arduino.server
         response=arduino.sendCmd "PMP3#{$songs[$index]}"
+        # Post "Now Playing ..." To Chatter
+        $dbcom.postToChatter($feed.ownerId, "Now playing '#{$songs[$index]}'")
       end
     end
     
@@ -44,8 +46,9 @@ class NotificationPort
       Debug.log "UNEXPECTED EXCEPTION => #{ex.class} : #{ex.message}"  
     ensure
       # Return ACK to OutboundMessage
+      Debug.log "Send ACK to salesforce"
       ack=NotificationsResponse.new(true)
-      ack
+      return ack
      end
   end
 end

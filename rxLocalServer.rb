@@ -46,7 +46,7 @@ def localServer
       if arduino.server
         response=arduino.sendCmd "PMP3#{currentSong}"
         # Post "Now Playing ..." To Chatter
-        $dbcom.replyToChatter($feed.feedId__c, "Now playing '#{currentSong}'")
+        $dbcom.postToChatter($feed.ownerId, "Now playing '#{currentSong}'")
       end
     end
     # -----------------------------------
@@ -56,7 +56,7 @@ def localServer
       Debug.log "Do Like"
       # Send Like To Chatter
       if ($dbcom.client)
-       $dbcom.likeToChatter $feed.feedId__c
+        $lastPost.like
       end
     end
 

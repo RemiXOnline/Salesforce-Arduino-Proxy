@@ -47,7 +47,8 @@ class RXdbcom
   #####################################
   # Post to chatter
   #####################################
-  def PostToChatter(userid, text)
+  def postToChatter(userid, text)
+    $lastPost=Databasedotcom::Chatter::UserProfileFeed.post(@client, userid, :text => text)
     Debug.log "Post to chatter (#{text})"
   end
   #####################################
