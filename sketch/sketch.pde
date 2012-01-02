@@ -1,8 +1,6 @@
-// rMP3
 #include <RogueMP3.h>
 #include <NewSoftSerial.h>
 #define _song1 "/Ringtone.mp3"
-
 #include <Ethernet.h>
 #include <SPI.h>
 
@@ -82,17 +80,9 @@ void checkForSensor()
     // Display value
     char toString[255];
     toString[0]='\0';
-    sprintf(toString, "Sensor Value %d",analogValue);
+    sprintf(toString, "SWITCH");
   
-   //rmp3_serial.begin(9600);
-   // rmp3.sync();
-   // rmp3.stop();
-         
-    // Play Test MP3
-   //rmp3_serial.begin(9600);
-   //rmp3.sync();
-   //rmp3.playfile(_song1);
- 
+
     Client client(proxyIP, proxyPort);
     if (client.connect()) {
       client.println(toString);
@@ -146,20 +136,16 @@ void checkForClient(){
             rmp3_serial.begin(9600);
             rmp3.sync();
             client.println("ok"); // Return OK
-            //rmp3_serial.begin(9600);
-            //rmp3.sync();
             rmp3.playfile(song);
             
               
-                triggerPin(9,client);
-             //   triggerPin(7,client);   
+            triggerPin(9,client);
            }
            if (!strcmp(cmd,"Hello"))
            {
               client.println("ok");
               
-                triggerPin(9,client);
-               // triggerPin(7,client);   
+                triggerPin(9,client);  
            }
            client.stop(); // close the connection:  
          }
@@ -174,12 +160,6 @@ void checkForClient(){
 }
 
 void triggerPin(int pin, Client client){
-//blink a pin - Client needed just for HTML output purposes.  
-  //if (client!=NULL)
- // {
-  // client.print("Turning on pin ");
-  // client.println(pin);
- // }
 for (int i=1;i<10;i++)
 {
   digitalWrite(pin, HIGH);
