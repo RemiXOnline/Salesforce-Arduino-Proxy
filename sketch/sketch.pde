@@ -13,8 +13,8 @@ boolean reading = false;
 ////////////////////////////////////////////////////////////////////////
 //CONFIGURE
 ////////////////////////////////////////////////////////////////////////
-  byte ip[] = { 192, 168, 1, 16 };   //ip address to assign the arduino
-  byte gateway[] = { 192, 168, 1, 1 }; //ip address of the gateway or router
+  byte ip[] = { 172, 16, 27, 100 };   //ip address to assign the arduino
+  byte gateway[] = {172, 16, 27, 1 }; //ip address of the gateway or router
   //Rarly need to change this
   byte subnet[] = { 255, 255, 255, 0 };
   // if need to change the MAC address (Very Rare)
@@ -24,10 +24,15 @@ boolean reading = false;
   // SENSOR
   int SensorPin = A0;
   int erreur = 500;    
+  
+  // Push Button
+  int inPin = 6;
+  int val = 0; 
 
   // Connexion to local Server
-  byte proxyIP[] = { 192, 168, 1, 15 }; // rxProxy
+  byte proxyIP[] = { 172, 16, 27, 99 }; // rxProxy
   int proxyPort=2000;
+
 
 ////////////////////////////////////////////////////////////////////////
 // S.E.T U.P
@@ -35,6 +40,7 @@ boolean reading = false;
 void setup(){
   //Pins 10,11,12 & 13 are used by the ethernet shield
   pinMode(9, OUTPUT);
+  pinMode(inPin, INPUT);    // declare pushbutton as input
 
   Ethernet.begin(mac, ip, gateway, subnet);
   server.begin();
@@ -63,8 +69,38 @@ void loop()
   // listen for incoming clients, and process qequest.
   checkForClient();
   delay(2);
+  // listen for Push Button
+  checkForButton();
+  delay(2);
 }
 
+// *********************************
+// P.U.S.H  B.U.T.T.O.N
+// *********************************
+void checkForButton()
+{  
+   val = digitalRead(inPin);  // read input value
+  
+  if (val == LOW) {    
+    
+    triggerPin(9,NULL);
+    
+    // Like
+    char toString[255];
+    toString[0]='\0';
+    sprintf(toString, "LIKE");
+  
+
+    Client client(proxyIP, proxyPort);
+    if (client.connect()) {
+      client.println(toString);
+      client.stop();
+    }
+    Serial.println(toString);
+    
+    delay(200);
+  }
+}
 // *********************************
 // S.E.N.S.O.R
 // *********************************

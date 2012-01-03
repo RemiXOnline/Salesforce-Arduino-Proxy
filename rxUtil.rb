@@ -1,7 +1,7 @@
 #####################################
 # CONSTANTS
 #####################################
-ARDUINO =  {:IP=>'127.0.0.1',:PORT =>'3333'} 
+ARDUINO =  {:IP=>'172.16.27.100',:PORT =>'80'} 
 LOCAL_PORT = 2000
 $songs=['Ringtone.mp3', 'Fake.mp3'] # Default Playlist
 
